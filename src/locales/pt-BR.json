@@ -1,0 +1,32 @@
+{
+  "nav": { "home": "Início", "settings": "Configurações" },
+  "home": { "title": "Seu app começa aqui" },
+  "window": {
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "restore": "Restaurar",
+    "close": "Fechar"
+  },
+  "settings": {
+    "title": "Configurações",
+    "reset": "Restaurar padrões",
+    "choose": "Escolher",
+    "sections": { "general": "Geral", "system": "Sistema", "data": "Dados" },
+    "theme": {
+      "label": "Tema",
+      "system": "Seguir o sistema",
+      "light": "Claro",
+      "dark": "Escuro"
+    },
+    "language": { "label": "Idioma", "system": "Seguir o sistema" },
+    "autostart": { "label": "Abrir ao iniciar o sistema" },
+    "minimizeToTray": {
+      "label": "Minimizar para a bandeja",
+      "description": "Fechar a janela mantém o app rodando."
+    },
+    "dataDir": { "label": "Pasta de dados" },
+    "maxItems": { "label": "Limite de itens" },
+    "logLevel": { "label": "Nível de log" }
+  },
+  "tray": { "show": "Abrir", "quit": "Sair" }
+}

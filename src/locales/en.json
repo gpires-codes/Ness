@@ -1,0 +1,32 @@
+{
+  "nav": { "home": "Home", "settings": "Settings" },
+  "home": { "title": "Your app starts here" },
+  "window": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "restore": "Restore",
+    "close": "Close"
+  },
+  "settings": {
+    "title": "Settings",
+    "reset": "Restore defaults",
+    "choose": "Browse",
+    "sections": { "general": "General", "system": "System", "data": "Data" },
+    "theme": {
+      "label": "Theme",
+      "system": "Follow system",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "language": { "label": "Language", "system": "Follow system" },
+    "autostart": { "label": "Launch at system startup" },
+    "minimizeToTray": {
+      "label": "Minimize to tray",
+      "description": "Closing the window keeps the app running."
+    },
+    "dataDir": { "label": "Data folder" },
+    "maxItems": { "label": "Item limit" },
+    "logLevel": { "label": "Log level" }
+  },
+  "tray": { "show": "Open", "quit": "Quit" }
+}
