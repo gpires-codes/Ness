@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "app-base",
+  "productName": "Ness",
   "version": "0.1.0",
-  "identifier": "com.pires.to-change",
+  "identifier": "com.pires.ness",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "app-base",
+        "title": "Ness",
         "width": 960,
         "height": 640,
         "minWidth": 480,

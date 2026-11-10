@@ -1,4 +1,4 @@
-# app-base
+# ness
 
 A starter template for cross-platform desktop apps built with Tauri 2, React and TypeScript. It ships with a schema-driven settings page, so every new app starts with working settings instead of a blank slate.
 
@@ -20,7 +20,7 @@ Node.js, Rust and the [Tauri system dependencies](https://v2.tauri.app/start/pre
 ## Getting started
 
 ```bash
-gh repo create my-app --template gpires-codes/app-base --private --clone
+gh repo create my-app --template gpires-codes/ness --private --clone
 cd my-app
 npm install
 npm run tauri dev
