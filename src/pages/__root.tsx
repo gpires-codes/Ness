@@ -14,7 +14,7 @@ function RootLayout() {
 
   return (
     <div className="app-shell app-backdrop text-foreground">
-      <TitleBar title="app-base" />
+      <TitleBar title="Ness" />
 
       <div className="flex-1 app-scrollbar">
         <Outlet />
