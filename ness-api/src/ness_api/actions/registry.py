@@ -50,7 +50,10 @@ ACTIONS: dict[str, Action] = {}
 
 
 def action_register(action: Action):
-    ACTIONS[action.name] = action
+    if action.name:
+        ACTIONS[action.name] = action
+    else:
+        return
 
 
 def list_for_openai() -> list[dict]:
