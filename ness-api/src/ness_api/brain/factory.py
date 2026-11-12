@@ -16,7 +16,7 @@ def _get_required_key(provider: str) -> str:
     return key
 
 
-FABRICAS: dict[str, Callable[[], Brain]] = {
+FACTORIES: dict[str, Callable[[], Brain]] = {
     "openai:gpt-4o-mini": lambda: OpenAIBrain(
         api_key=_get_required_key("openai"), model="gpt-4o-mini"
     ),
@@ -33,11 +33,11 @@ FABRICAS: dict[str, Callable[[], Brain]] = {
 
 
 def create_brain(chave: str) -> Brain:
-    fabrica = FABRICAS.get(chave)
-    if not fabrica:
+    factory = FACTORIES.get(chave)
+    if not factory:
         raise ValueError(f"Brain desconhecido: {chave}")
-    return fabrica()
+    return factory()
 
 
 def list_brains() -> list[str]:
-    return list(FABRICAS.keys())
+    return list(FACTORIES.keys())
