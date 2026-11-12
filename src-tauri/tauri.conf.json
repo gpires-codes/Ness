@@ -26,7 +26,11 @@
         "img-src": ["'self'", "data:", "asset:", "http://asset.localhost"],
         "style-src": ["'self'", "'unsafe-inline'"],
         "font-src": ["'self'", "data:"],
-        "connect-src": ["ipc:", "http://ipc.localhost"]
+        "connect-src": [
+          "ipc:",
+          "http://ipc.localhost",
+          "http://127.0.0.1:8000"
+        ]
       },
       "devCsp": {
         "default-src": "'self'",
@@ -37,6 +41,7 @@
         "connect-src": [
           "ipc:",
           "http://ipc.localhost",
+          "http://127.0.0.1:8000",
           "ws://localhost:1420",
           "http://localhost:1420"
         ]

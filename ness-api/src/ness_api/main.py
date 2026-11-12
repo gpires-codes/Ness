@@ -1,12 +1,12 @@
-import asyncio
 import os
-from contextlib import asynccontextmanager
+import secrets
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import RequestResponseEndpoint
+from starlette.responses import JSONResponse, Response
 
-from ness_api.core import ConfirmationBroker, activate_brain
 from ness_api.routes import chat
 
 # Origens do front: Vite em dev e o webview do Tauri em produção (varia por SO).
@@ -19,28 +19,7 @@ ALLOWED_ORIGINS = [
 ]
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    if not os.environ.get("NESS_TOKEN"):
-        raise RuntimeError("Defina NESS_TOKEN (veja .env.example)")
-
-    app.state.brain = None
-    app.state.orchestrator = None
-    app.state.brain_error = None
-    app.state.confirmations = ConfirmationBroker()
-    app.state.chat_lock = asyncio.Lock()
-
-    try:
-        activate_brain(app, os.environ.get("NESS_BRAIN", "openai:gpt-4o-mini"))
-        print("✅ Brain pronto")
-    except ValueError as err:  # chave fora do cofre ou modelo desconhecido
-        app.state.brain_error = str(err)
-        print(f"⚠️ Brain não iniciado: {err}")
-
-    yield
-
-
-app = FastAPI(title="Ness API", lifespan=lifespan)
+app = FastAPI(title="Ness API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -50,13 +29,45 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type"],
 )
 
-app.include_router(chat.router)
+
+@app.middleware("http")
+async def require_bearer_token(
+    request: Request, call_next: RequestResponseEndpoint
+) -> Response:
+    if request.url.path == "/health" or request.method == "OPTIONS":
+        return await call_next(request)
+
+    expected = os.environ.get("NESS_TOKEN")
+    if not expected:
+        return JSONResponse(
+            status_code=503,
+            content={"detail": "API token is not configured"},
+        )
+
+    parts = request.headers.get("authorization", "").split()
+    if (
+        len(parts) != 2
+        or parts[0].lower() != "bearer"
+        or not secrets.compare_digest(
+            parts[1].encode("utf-8"), expected.encode("utf-8")
+        )
+    ):
+        return JSONResponse(
+            status_code=401,
+            content={"detail": "Invalid or missing bearer token"},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return await call_next(request)
 
 
 @app.get("/health")
 async def health():
     """Sem auth de propósito: o Tauri usa pra saber se o sidecar já subiu."""
-    return {"ok": True, "brain_ready": app.state.orchestrator is not None}
+    return {
+        "ok": True,
+        "brain_ready": getattr(app.state, "orchestrator", None) is not None,
+    }
 
 
 def start():
