@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { useTr } from "@/core/i18n";
 import { useSettings } from "@/core/settings/SettingsProvider";
 import { useVisibleSections } from "@/core/settings/useVisibleSections";
+import { cn } from "@/lib/utils";
 
 import {
   Sidebar,
@@ -36,15 +37,14 @@ export function SettingsPage({
   const hasChanges =
     sectionDefaults?.fields.some(
       (field) =>
-        field.type !== "secret" &&
-        !Object.is(values[field.key], field.default),
+        field.type !== "secret" && !Object.is(values[field.key], field.default),
     ) ?? false;
 
   return (
     <SidebarProvider className="h-full min-h-0">
       <SettingsSideBar
         collapsible="none"
-        className="m-2 h-[calc(100%-1rem)] rounded-xl border"
+        className="m-2 h-[calc(100%-1rem)] rounded-xl border !glass"
         sections={sections}
         selectedSection={current.id}
         onSelectSection={onSelectSection}
@@ -101,10 +101,11 @@ function SettingsSideBar({
             <SidebarMenu className="gap-0.5">
               {sections.map((sec) => {
                 const Icon = sec.icon;
+                const isActive = sec.id === selectedSection;
                 return (
                   <SidebarMenuItem key={sec.id}>
                     <SidebarMenuButton
-                      isActive={sec.id === selectedSection}
+                      className={cn(isActive && "bg-muted/50")}
                       onClick={() => onSelectSection(sec.id)}
                     >
                       {Icon && <Icon />}
