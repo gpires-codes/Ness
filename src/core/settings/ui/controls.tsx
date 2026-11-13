@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { isTauri } from "@/core/platform";
 import type { Field, NumberField, PathField } from "@/core/settings/types";
 import { optionsOf, validatorOf } from "@/core/settings/engine";
+import { SecretControl } from "./SecretControl";
 
 import {
   Select,
@@ -52,7 +53,7 @@ export function Control({ field, id, value, onChange }: CtlProps<Field>) {
       return (
         <Input
           id={id}
-          type={field.secret ? "password" : "text"}
+          type="text"
           value={String(value)}
           placeholder={field.placeholder ? tr(field.placeholder) : undefined}
           maxLength={field.maxLength}
@@ -60,6 +61,8 @@ export function Control({ field, id, value, onChange }: CtlProps<Field>) {
           onChange={(e) => onChange(e.target.value)}
         />
       );
+    case "secret":
+      return <SecretControl field={field} id={id} />;
     case "number":
       return (
         <NumberInput field={field} id={id} value={value} onChange={onChange} />

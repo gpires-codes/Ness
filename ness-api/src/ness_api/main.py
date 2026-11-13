@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.responses import JSONResponse, Response
 
-from ness_api.routes import chat
+from ness_api.routes import router as api_router
 
 # Origens do front: Vite em dev e o webview do Tauri em produção (varia por SO).
 ALLOWED_ORIGINS = [
@@ -25,9 +25,10 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=False,  # usamos Bearer token, não cookie
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
+app.include_router(api_router)
 
 
 @app.middleware("http")

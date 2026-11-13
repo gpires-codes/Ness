@@ -35,7 +35,9 @@ export function SettingsPage({
   const sectionDefaults = schema.sections.find((s) => s.id === current.id);
   const hasChanges =
     sectionDefaults?.fields.some(
-      (field) => !Object.is(values[field.key], field.default),
+      (field) =>
+        field.type !== "secret" &&
+        !Object.is(values[field.key], field.default),
     ) ?? false;
 
   return (

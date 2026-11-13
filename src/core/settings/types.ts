@@ -20,8 +20,11 @@ export type TextField = FieldBase & {
   default: string;
   placeholder?: string;
   maxLength?: number;
-  /** Campo mascarado. Segredo de verdade vai pro keyring, não pro store. */
-  secret?: boolean;
+};
+export type SecretProvider = "openai" | "anthropic";
+export type SecretField = FieldBase & {
+  type: "secret";
+  provider: SecretProvider;
 };
 export type NumberField = FieldBase & {
   type: "number";
@@ -42,7 +45,13 @@ export type PathField = FieldBase & {
 };
 
 export type Field =
-  ToggleField | TextField | NumberField | SelectField | PathField;
+  | ToggleField
+  | TextField
+  | SecretField
+  | NumberField
+  | SelectField
+  | PathField;
+export type PersistentField = Exclude<Field, SecretField>;
 
 export interface Section {
   id: string;

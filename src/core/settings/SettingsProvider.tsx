@@ -1,6 +1,14 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { openKV, type KV } from "../platform";
-import { defaultsOf, migrate, sanitize } from "./engine";
+import { allFields, defaultsOf, migrate, sanitize } from "./engine";
 import type { SettingsSchema, Values } from "./types";
 
 interface Ctx {
@@ -31,7 +39,9 @@ export function SettingsProvider({
       const kv = await openKV(file);
       kvRef.current = kv;
       const stored = (await kv.get("settings")) as Values | undefined;
-      const clean = sanitize(schema, migrate(schema, stored));
+      const raw = migrate(schema, stored);
+      const clean = sanitize(schema, raw);
+
       valuesRef.current = clean;
       if (alive) setValues(clean);
       await kv.set("settings", { ...clean, __v: schema.version });
@@ -51,8 +61,17 @@ export function SettingsProvider({
   );
 
   const set = useCallback(
-    (key: string, value: unknown) => commit({ ...valuesRef.current, [key]: value }),
-    [commit],
+    (key: string, value: unknown) => {
+      if (
+        allFields(schema).some(
+          (field) => field.key === key && field.type === "secret",
+        )
+      ) {
+        throw new Error("Secret fields must use the secure credential store");
+      }
+      commit({ ...valuesRef.current, [key]: value });
+    },
+    [commit, schema],
   );
   const reset = useCallback(
     (sectionId?: string) => {
@@ -66,7 +85,18 @@ export function SettingsProvider({
   );
 
   if (!values) return null; // carregando (é local, dura milissegundos)
-  return <SettingsCtx.Provider value={{ schema, values, set, reset }}>{children}</SettingsCtx.Provider>;
+  return (
+    <SettingsCtx.Provider
+      value={{
+        schema,
+        values,
+        set,
+        reset,
+      }}
+    >
+      {children}
+    </SettingsCtx.Provider>
+  );
 }
 
 export function useSettings(): Ctx {

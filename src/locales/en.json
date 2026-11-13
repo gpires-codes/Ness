@@ -11,7 +11,27 @@
     "title": "Settings",
     "reset": "Restore defaults",
     "choose": "Browse",
-    "sections": { "general": "General", "system": "System", "data": "Data" },
+    "sections": {
+      "general": "General",
+      "system": "System",
+      "data": "Data",
+      "brain": "AI Providers"
+    },
+    "openaikey": { "label": "OpenAI API key" },
+    "anthropickey": { "label": "Anthropic API key" },
+    "secret": {
+      "description": "Stored in the system credential vault. The value is not shown after saving.",
+      "placeholder": "Paste the API key",
+      "save": "Save key",
+      "remove": "Remove",
+      "loading": "Checking credential…",
+      "notConfigured": "No key configured",
+      "statusError": "Could not check the system credential vault.",
+      "saved": "Key saved securely.",
+      "saveError": "Could not save the key. Check the system credential vault.",
+      "removed": "Key removed.",
+      "removeError": "Could not remove the key from the credential vault."
+    },
     "theme": {
       "label": "Theme",
       "system": "Follow system",

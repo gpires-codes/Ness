@@ -2,6 +2,7 @@ import { z } from "zod";
 import type {
   Field,
   Option,
+  PersistentField,
   SelectField,
   SettingsSchema,
   Values,
@@ -13,7 +14,7 @@ export const allFields = (s: SettingsSchema): Field[] =>
 export const optionsOf = (f: SelectField): Option[] =>
   f.options.map((o) => (typeof o === "string" ? { value: o, label: o } : o));
 
-export function validatorOf(f: Field): z.ZodTypeAny {
+export function validatorOf(f: PersistentField): z.ZodTypeAny {
   switch (f.type) {
     case "toggle":
       return z.boolean();
@@ -42,7 +43,9 @@ export function defaultsOf(schema: SettingsSchema, sectionId?: string): Values {
       : schema.sections.filter((section) => section.id === sectionId);
   return Object.fromEntries(
     sections.flatMap((section) =>
-      section.fields.map((field) => [field.key, field.default]),
+      section.fields
+        .filter((field) => field.type !== "secret")
+        .map((field) => [field.key, field.default]),
     ),
   );
 }
@@ -51,6 +54,7 @@ export function defaultsOf(schema: SettingsSchema, sectionId?: string): Values {
 export function sanitize(schema: SettingsSchema, raw: Values): Values {
   const out = defaultsOf(schema);
   for (const f of allFields(schema)) {
+    if (f.type === "secret") continue;
     if (!(f.key in raw)) continue;
     const r = validatorOf(f).safeParse(raw[f.key]);
     if (r.success) out[f.key] = r.data;

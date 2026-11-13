@@ -1,4 +1,9 @@
-import { Database, Monitor, SlidersHorizontal } from "lucide-react";
+import {
+  BrainCircuit,
+  Database,
+  Monitor,
+  SlidersHorizontal,
+} from "lucide-react";
 
 import { defineSettings, type SettingsSchema } from "@/core/settings/types";
 
@@ -8,7 +13,7 @@ import { defineSettings, type SettingsSchema } from "@/core/settings/types";
  * Texto cru também funciona (vira ele mesmo se a chave não existir).
  */
 export const settingsSchema: SettingsSchema = defineSettings({
-  version: 1,
+  version: 2,
   sections: [
     {
       id: "general",
@@ -58,6 +63,27 @@ export const settingsSchema: SettingsSchema = defineSettings({
           default: true,
           description: "settings.minimizeToTray.description",
           platforms: ["desktop"],
+        },
+      ],
+    },
+    {
+      id: "brain",
+      title: "settings.sections.brain",
+      icon: BrainCircuit,
+      fields: [
+        {
+          key: "openaikey",
+          type: "secret",
+          provider: "openai",
+          label: "settings.openaikey.label",
+          description: "settings.secret.description",
+        },
+        {
+          key: "anthropickey",
+          type: "secret",
+          provider: "anthropic",
+          label: "settings.anthropickey.label",
+          description: "settings.secret.description",
         },
       ],
     },

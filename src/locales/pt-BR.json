@@ -11,7 +11,27 @@
     "title": "Configurações",
     "reset": "Restaurar padrões",
     "choose": "Escolher",
-    "sections": { "general": "Geral", "system": "Sistema", "data": "Dados" },
+    "sections": {
+      "general": "Geral",
+      "system": "Sistema",
+      "data": "Dados",
+      "brain": "Provedores de IA"
+    },
+    "openaikey": { "label": "Chave da API da OpenAI" },
+    "anthropickey": { "label": "Chave da API da Anthropic" },
+    "secret": {
+      "description": "Armazenada no cofre de credenciais do sistema. O valor não é exibido após salvar.",
+      "placeholder": "Cole a chave da API",
+      "save": "Salvar chave",
+      "remove": "Remover",
+      "loading": "Verificando credencial…",
+      "notConfigured": "Nenhuma chave configurada",
+      "statusError": "Não foi possível verificar o cofre de credenciais.",
+      "saved": "Chave salva com segurança.",
+      "saveError": "Não foi possível salvar. Verifique o cofre de credenciais do sistema.",
+      "removed": "Chave removida.",
+      "removeError": "Não foi possível remover a chave do cofre de credenciais."
+    },
     "theme": {
       "label": "Tema",
       "system": "Seguir o sistema",
