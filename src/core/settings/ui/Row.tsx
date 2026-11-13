@@ -18,12 +18,16 @@ export function Row({ field }: { field: Field }) {
       <div className="min-w-0">
         <Label htmlFor={id}>{tr(field.label)}</Label>
         {field.description && (
-          <p className="mt-0.5 text-sm text-muted-foreground">
-            {tr(field.description)}
-          </p>
+          <div className="hidden md:block mt-0.5 text-sm text-muted-foreground">
+            <p className="line-clamp-4">{tr(field.description)}</p>
+          </div>
         )}
       </div>
-      <div className="flex sm:w-60 sm:shrink-0 sm:justify-end">
+      <div
+        className={`flex sm:shrink-0 sm:justify-end ${
+          field.type === "secret" ? "sm:w-96" : "sm:w-60"
+        }`}
+      >
         <Control
           field={field}
           id={id}
