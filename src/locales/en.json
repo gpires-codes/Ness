@@ -1,6 +1,18 @@
 {
   "nav": { "home": "Home", "settings": "Settings" },
-  "home": { "title": "Your app starts here" },
+  "home": { "title": "Chat with Ness" },
+  "chat": {
+    "conversation": "Conversation",
+    "empty": "Send a message to get started.",
+    "emptyResponse": "I did not receive a text response.",
+    "model": "Model",
+    "placeholder": "Type your message…",
+    "send": "Send",
+    "sending": "Sending…",
+    "thinking": "Thinking…",
+    "toolNotAvailable": "The “{{name}}” tool is not available yet; no action was executed.",
+    "unknownError": "Could not send the message."
+  },
   "window": {
     "minimize": "Minimize",
     "maximize": "Maximize",

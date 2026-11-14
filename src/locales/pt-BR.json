@@ -1,6 +1,18 @@
 {
   "nav": { "home": "Início", "settings": "Configurações" },
-  "home": { "title": "Seu app começa aqui" },
+  "home": { "title": "Converse com a Ness" },
+  "chat": {
+    "conversation": "Conversa",
+    "empty": "Envie uma mensagem para começar.",
+    "emptyResponse": "Não recebi uma resposta em texto.",
+    "model": "Modelo",
+    "placeholder": "Digite sua mensagem…",
+    "send": "Enviar",
+    "sending": "Enviando…",
+    "thinking": "Pensando…",
+    "toolNotAvailable": "A ferramenta “{{name}}” ainda não está disponível; nenhuma ação foi executada.",
+    "unknownError": "Não foi possível enviar a mensagem."
+  },
   "window": {
     "minimize": "Minimizar",
     "maximize": "Maximizar",

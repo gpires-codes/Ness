@@ -83,8 +83,11 @@
   --sidebar-ring: oklch(0.708 0 0);
   /* For glass utility */
   --glass-blur: 16px;
-  --glass-opacity: 60%;
+  --glass-opacity: 50%;
   --glass-saturate: 140%;
+  --glass-background: oklch(0 0 0 / 10%);
+  /* For app-backdrop utility */
+  --backdrop-opacity: 67%;
 }
 
 .dark {
@@ -119,6 +122,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  /* For glass utility */
+  --glass-background: oklch(1 0 0 / 10%);
+  /* For app-backdrop utility */
+  --backdrop-opacity: 35%;
 }
 
 @layer base {
@@ -148,7 +155,7 @@
 @utility glass {
   background-color: color-mix(
     in oklab,
-    var(--background) var(--glass-opacity),
+    var(--glass-background) var(--glass-opacity),
     transparent
   );
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
@@ -173,12 +180,12 @@
   background-image:
     radial-gradient(
       ellipse at top left,
-      oklch(0.7 0.15 280 / 0.35),
-      transparent 60%
+      oklch(0.7865 0.1248 236.79 / var(--backdrop-opacity)),
+      transparent 67%
     ),
     radial-gradient(
       ellipse at bottom right,
-      oklch(0.7 0.15 200 / 0.3),
-      transparent 60%
+      oklch(0.7 0.15 200 / var(--backdrop-opacity)),
+      transparent 67%
     );
 }
