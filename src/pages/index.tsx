@@ -94,6 +94,7 @@ function Index() {
       <ChatMessageScroller
         messages={displayMessages}
         emptyMessage={t("chat.empty")}
+        isLoading={chat.isLoading}
       />
 
       {error && (

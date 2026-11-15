@@ -19,6 +19,23 @@ export type ChatTurn = {
   content: string;
 };
 
+export function shouldShowThinkingLoader(
+  messages: ChatTurn[],
+  isLoading: boolean,
+): boolean {
+  if (!isLoading) return false;
+
+  let lastUserIndex = -1;
+  for (let index = 0; index < messages.length; index += 1) {
+    if (messages[index].role === "user") lastUserIndex = index;
+  }
+  if (lastUserIndex === -1) return messages.length === 0;
+
+  return !messages
+    .slice(lastUserIndex + 1)
+    .some((message) => message.role === "assistant" && message.content.length > 0);
+}
+
 const chatModelsSchema = z.array(chatModelSchema);
 const errorSchema = z.object({ detail: z.string() });
 

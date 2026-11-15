@@ -1,7 +1,7 @@
 import { cn } from "cn";
 import { Copy, Loader } from "lucide-react";
 
-import type { ChatTurn } from "@/core/chat";
+import { shouldShowThinkingLoader, type ChatTurn } from "@/core/chat";
 
 import {
   MessageScroller,
@@ -22,10 +22,23 @@ import { Button } from "@/components/ui/button";
 interface Props {
   messages: ChatTurn[];
   emptyMessage: string;
+  isLoading: boolean;
 }
 
-export function ChatMessageScroller({ messages, emptyMessage }: Props) {
-  const isEmpty = messages.length === 0;
+export function ChatMessageScroller({
+  messages,
+  emptyMessage,
+  isLoading,
+}: Props) {
+  const showThinkingLoader = shouldShowThinkingLoader(messages, isLoading);
+  let lastUserIndex = -1;
+  for (let index = 0; index < messages.length; index += 1) {
+    if (messages[index].role === "user") lastUserIndex = index;
+  }
+  const pendingAssistant = messages
+    .slice(lastUserIndex + 1)
+    .find((message) => message.role === "assistant");
+  const isEmpty = messages.length === 0 && !showThinkingLoader;
 
   return (
     <MessageScrollerProvider>
@@ -103,11 +116,21 @@ export function ChatMessageScroller({ messages, emptyMessage }: Props) {
                         </MessageFooter>
                       </MessageContent>
                     </Message>
-                  ) : (
+                  ) : showThinkingLoader &&
+                    message.id === pendingAssistant?.id ? (
                     <Loader className="w-4 h-4 animate-spin shimmer text-muted-foreground" />
-                  )}
+                  ) : null}
                 </MessageScrollerItem>
               ))}
+              {showThinkingLoader && !pendingAssistant && (
+                <MessageScrollerItem
+                  key={`thinking-${messages[lastUserIndex]?.id ?? "chat"}`}
+                  messageId={`thinking-${messages[lastUserIndex]?.id ?? "chat"}`}
+                  scrollAnchor={false}
+                >
+                  <Loader className="w-4 h-4 animate-spin shimmer text-muted-foreground" />
+                </MessageScrollerItem>
+              )}
             </MessageScrollerContent>
           </MessageScrollerViewport>
           <MessageScrollerButton />
