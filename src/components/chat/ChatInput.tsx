@@ -3,6 +3,8 @@ import { ArrowUp } from "lucide-react";
 import { useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
+import { useTr } from "@/core/i18n";
+
 import {
   InputGroup,
   InputGroupAddon,
@@ -24,6 +26,7 @@ export function ChatInput({
   onSend,
   disabled = false,
 }: ChatInputProps) {
+  const tr = useTr();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
@@ -46,7 +49,7 @@ export function ChatInput({
           }
           ref={textareaRef}
           value={draft}
-          placeholder="Escreva uma mensagem..."
+          placeholder={tr("chat.placeholder")}
           disabled={disabled}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => {
