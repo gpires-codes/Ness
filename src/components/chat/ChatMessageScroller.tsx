@@ -21,14 +21,19 @@ import { Button } from "@/components/ui/button";
 
 interface Props {
   messages: ChatTurn[];
+  emptyMessage: string;
 }
 
-export function ChatMessageScroller({ messages }: Props) {
+export function ChatMessageScroller({ messages, emptyMessage }: Props) {
   const isEmpty = messages.length === 0;
 
   return (
     <MessageScrollerProvider>
-      {!isEmpty && (
+      {isEmpty ? (
+        <p className="text-sm text-muted-foreground" aria-live="polite">
+          {emptyMessage}
+        </p>
+      ) : (
         <MessageScroller>
           <MessageScrollerViewport
             className={cn("app-scrollbar scroll-fade-8")}
@@ -36,8 +41,8 @@ export function ChatMessageScroller({ messages }: Props) {
             <MessageScrollerContent>
               {messages.map((message) => (
                 <MessageScrollerItem
-                  key={message.content.slice(0, 15)}
-                  messageId={message.content.slice(0, 15)}
+                  key={message.id}
+                  messageId={message.id}
                   scrollAnchor={message.role === "user"}
                 >
                   {message.content ? (

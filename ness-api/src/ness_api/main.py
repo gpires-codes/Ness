@@ -26,7 +26,7 @@ app.add_middleware(
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=False,  # usamos Bearer token, não cookie
     allow_methods=["GET", "POST", "DELETE"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_headers=["Authorization", "Content-Type", "X-Run-Id"],
 )
 app.include_router(api_router)
 

@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { fetchServerSentEvents, useChat } from "@tanstack/ai-react";
 import { createFileRoute } from "@tanstack/react-router";
-
-import {
-  chatModels,
-  streamChat,
-  type ChatModel,
-  type ChatTurn,
-} from "@/core/chat";
 
 import { ChatInput, SelectModelButton } from "@/components/chat";
 import { ChatMessageScroller } from "@/components/chat/ChatMessageScroller";
+import { apiFetchUrl, API_BASE_URL } from "@/core/api";
+import { getModels, type ChatModel, type ChatTurn } from "@/core/chat";
+
+const chatConnection = fetchServerSentEvents(`${API_BASE_URL}chat`, {
+  fetchClient: apiFetchUrl,
+});
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -19,99 +19,82 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { t } = useTranslation();
-  const [messages, setMessages] = useState<ChatTurn[]>([]);
+  const [threadId] = useState(() => crypto.randomUUID());
+  const [models, setModels] = useState<ChatModel[]>([]);
+  const [model, setModel] = useState("");
+  const [modelError, setModelError] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
-  const [model, setModel] = useState<ChatModel>(chatModels[0].id);
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  async function sendMessage() {
-    const content = draft.trim();
-    if (!content || sending) return;
+  const chat = useChat({
+    connection: chatConnection,
+    threadId,
+    forwardedProps: { model },
+  });
 
-    const conversation = [...messages, { role: "user" as const, content }];
-    const requestMessages = conversation.slice(-50);
-    let assistantContent = "";
-
-    setMessages([...conversation, { role: "assistant", content: "" }]);
-    setDraft("");
-    setError(null);
-    setSending(true);
-
-    try {
-      await streamChat(model, requestMessages, (streamEvent) => {
-        if (streamEvent.type === "delta") {
-          assistantContent += streamEvent.text;
-        } else if (streamEvent.type === "tool_call") {
-          const notice = t("chat.toolNotAvailable", {
-            name: streamEvent.name,
-          });
-          assistantContent = assistantContent
-            ? `${assistantContent}\n\n${notice}`
-            : notice;
-        } else {
-          return;
+  useEffect(() => {
+    let active = true;
+    getModels("chat")
+      .then((availableModels) => {
+        if (!active) return;
+        setModels(availableModels);
+        setModel((current) =>
+          availableModels.some((option) => option.id === current)
+            ? current
+            : (availableModels[0]?.id ?? ""),
+        );
+      })
+      .catch((error: unknown) => {
+        if (active) {
+          setModelError(
+            error instanceof Error ? error.message : t("chat.unknownError"),
+          );
         }
-
-        setMessages((current) => [
-          ...current.slice(0, -1),
-          { role: "assistant", content: assistantContent },
-        ]);
       });
-      if (!assistantContent) {
-        assistantContent = t("chat.emptyResponse");
-        setMessages((current) => [
-          ...current.slice(0, -1),
-          { role: "assistant", content: assistantContent },
-        ]);
-      }
-    } catch (caught) {
-      if (!assistantContent) {
-        setMessages(messages);
-        setDraft(content);
-      }
-      setError(
-        caught instanceof Error ? caught.message : t("chat.unknownError"),
-      );
-    } finally {
-      setSending(false);
-    }
+
+    return () => {
+      active = false;
+    };
+  }, [t]);
+
+  const displayMessages = useMemo<ChatTurn[]>(
+    () =>
+      chat.messages.flatMap((message) => {
+        if (message.role !== "user" && message.role !== "assistant") return [];
+        return [
+          {
+            id: message.id,
+            role: message.role,
+            content: message.parts
+              .map((part) => {
+                if (part.type === "text") return part.content;
+                if (part.type === "tool-call") {
+                  return t("chat.toolNotAvailable", { name: part.name });
+                }
+                return "";
+              })
+              .filter(Boolean)
+              .join("\n\n"),
+          },
+        ];
+      }),
+    [chat.messages, t],
+  );
+
+  function sendMessage(text: string) {
+    const content = text.trim();
+    if (!content || chat.isLoading || !model) return;
+    setDraft("");
+    void chat.sendMessage(content);
   }
 
+  const error = modelError ?? chat.error?.message;
+
   return (
-    <main className="mx-auto flex flex-col h-full w-full max-w-3xl justify-center py-6">
-      <ChatMessageScroller messages={messages} />
-      {/* <section
-        className="flex-1 space-y-4 pb-6 overflow-auto max-h-[65vh] app-scrollbar"
-        aria-label={t("chat.conversation")}
-        aria-live="polite"
-      >
-        {messages.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t("chat.empty")}</p>
-        ) : (
-          messages.map((message, index) => (
-            <div
-              key={`${index}-${message.role}`}
-              className={
-                message.role === "user"
-                  ? "ml-auto max-w-[85%] rounded-2xl bg-primary/70 glass px-4 py-3 text-primary-foreground"
-                  : "mr-auto max-w-[85%] rounded-2xl glass px-4 py-3"
-              }
-            >
-              {message.content ? (
-                <p className="whitespace-pre-wrap">{message.content}</p>
-              ) : (
-                sending &&
-                index === messages.length - 1 && (
-                  <p className="text-sm text-muted-foreground">
-                    {t("chat.thinking")}
-                  </p>
-                )
-              )}
-            </div>
-          ))
-        )}
-      </section> */}
+    <main className="mx-auto flex h-full w-full max-w-3xl flex-col justify-center py-6">
+      <ChatMessageScroller
+        messages={displayMessages}
+        emptyMessage={t("chat.empty")}
+      />
 
       {error && (
         <p className="mb-3 text-sm text-destructive" role="alert">
@@ -119,9 +102,19 @@ function Index() {
         </p>
       )}
 
-      <SelectModelButton model={model} setModel={setModel} disabled={sending} />
+      <SelectModelButton
+        model={model}
+        models={models}
+        setModel={setModel}
+        disabled={chat.isLoading || models.length === 0}
+      />
 
-      <ChatInput draft={draft} setDraft={setDraft} onSend={sendMessage} />
+      <ChatInput
+        draft={draft}
+        setDraft={setDraft}
+        onSend={sendMessage}
+        disabled={chat.isLoading || models.length === 0}
+      />
     </main>
   );
 }

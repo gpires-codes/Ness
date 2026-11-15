@@ -1,0 +1,130 @@
+{
+  "planHash": "e24bde4ab2e76c5597459adf966afa30b280d51893595b45c64cbb3773594ab5",
+  "phase": "standalone",
+  "recordedAtUtc": "2026-11-15T03:15:42.4096450Z",
+  "retryCount": 3,
+  "resetBaseline": false,
+  "complete": true,
+  "result": {
+    "setupSucceeded": true,
+    "setupDurationMs": 0,
+    "setupFailureOutput": null,
+    "assertions": [
+      {
+        "name": "production-build",
+        "kind": "process",
+        "verificationMethod": "exit-code",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "\r\n\u003E ness@0.1.0 build\r\n\u003E tsc \u0026\u0026 vite build\r\n\r\n\u001B[33m(!) Your Vite config uses features that are unsupported by \u0060configLoader: \u0027native\u0027\u0060, which is planned to become the default in a future major version of Vite:\r\n  - \u0060__dirname\u0060 (vite.config.ts:20:41). Use \u0060import.meta.dirname\u0060 instead\r\nSet \u0060VITE_CONFIG_NATIVE_IGNORE_WARNING=true\u0060 to suppress this warning.\u001B[39m\r\n\u001B[36mvite v8.3.5 \u001B[32mbuilding client environment for production...\u001B[36m\u001B[39m\r\ntransforming...\r\n\u2713 2641 modules transformed.\r\nrendering chunks...\r\ncomputing gzip size...\r\ndist/index.html                                              0.70 kB \u2502 gzip:  0.36 kB\r\ndist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB\r\ndist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB\r\ndist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB\r\ndist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB\r\ndist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB\r\ndist/assets/index-BeP2K_-B.css                              81.79 kB \u2502 gzip: 13.96 kB\r\ndist/assets/dist-js-BXnydrbO.js                              0.16 kB \u2502 gzip:  0.15 kB\r\ndist/assets/dist-js-DuWbOoIE.js                              0.26 kB \u2502 gzip:  0.16 kB\r\ndist/assets/rolldown-runtime-XKyaHtl9.js                     0.72 kB \u2502 gzip:  0.42 kB\r\ndist/assets/dist-js-f1PvFdPB.js                              1.50 kB \u2502 gzip:  0.51 kB\r\ndist/assets/core-CWtvOgqg.js                                 2.05 kB \u2502 gzip:  0.88 kB\r\ndist/assets/settings-D1WGBBzh.js                            54.64 kB \u2502 gzip: 17.50 kB\r\ndist/assets/api-CfWcKCOx.js                                119.12 kB \u2502 gzip: 41.55 kB\r\ndist/assets/button-COWOmDQs.js                             195.02 kB \u2502 gzip: 63.28 kB\r\ndist/assets/pages-BVXjHlNf.js                              255.57 kB \u2502 gzip: 69.56 kB\r\ndist/assets/index-BTNJJwPP.js                              316.22 kB \u2502 gzip: 99.98 kB\r\n\r\n\u001B[32m\u2713 built in 2.06s\u001B[39m\r\n",
+        "durationMs": 8345
+      },
+      {
+        "name": "tests-pass",
+        "kind": "process",
+        "verificationMethod": "test-results",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "\r\n\u003E ness@0.1.0 test\r\n\u003E vitest run\r\n\r\n\u001B[33m(!) Your Vite config uses features that are unsupported by \u0060configLoader: \u0027native\u0027\u0060, which is planned to become the default in a future major version of Vite:\r\n  - \u0060__dirname\u0060 (vite.config.ts:20:41). Use \u0060import.meta.dirname\u0060 instead\r\nSet \u0060VITE_CONFIG_NATIVE_IGNORE_WARNING=true\u0060 to suppress this warning.\u001B[39m\r\n\r\n RUN  v5.1.0 D:/Projetos/Tauri/Ness\r\n\r\n\r\n Test Files  1 passed (1)\r\n      Tests  2 passed (2)\r\n   Start at  00:15:30\r\n   Duration  390ms (import 73%, tests 17%, transform 6%, worker 4%)\r\n\r\n",
+        "durationMs": 2595,
+        "testResults": {
+          "testFramework": "vitest",
+          "runnerDetectedFrom": "package_json",
+          "testsTotal": 2,
+          "testsPassed": 2,
+          "testsFailed": 0,
+          "testsSkipped": 0,
+          "parseFailed": false
+        }
+      },
+      {
+        "name": "backend-tests",
+        "kind": "process",
+        "verificationMethod": "exit-code",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "....................                                                     [100%]\r\n============================== warnings summary ===============================\r\nsrc/ness_api/tests/test_chat.py::test_chat_rejects_unregistered_model\r\n  C:\\Python314\\Lib\\asyncio\\events.py:94: StarletteDeprecationWarning: \u0027HTTP_422_UNPROCESSABLE_ENTITY\u0027 is deprecated. Use \u0027HTTP_422_UNPROCESSABLE_CONTENT\u0027 instead.\r\n    self._context.run(self._callback, *self._args)\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n20 passed, 1 warning in 6.69s\r\n",
+        "durationMs": 8729
+      },
+      {
+        "name": "dev-server-home-200",
+        "kind": "http-probe",
+        "verificationMethod": "http-status",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": null,
+        "outputSample": "HTTP 200\n\u003C!doctype html\u003E\r\n\u003Chtml lang=\u0022en\u0022\u003E\r\n  \u003Chead\u003E\n    \u003Cscript type=\u0022module\u0022\u003Eimport { injectIntoGlobalHook } from \u0022/@react-refresh\u0022;\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () =\u003E {};\nwindow.$RefreshSig$ = () =\u003E (type) =\u003E type;\u003C/script\u003E\n\n    \u003Cscript type=\u0022module\u0022 src=\u0022/@vite/client\u0022\u003E\u003C/script\u003E\n\r\n    \u003Cmeta charset=\u0022UTF-8\u0022 /\u003E\r\n    \u003Clink rel=\u0022icon\u0022 type=\u0022image/svg\u002Bxml\u0022 href=\u0022/vite.svg\u0022 /\u003E\r\n    \u003Cmeta name=\u0022viewport\u0022 content=\u0022width=device-width, initial-scale=1.0\u0022 /\u003E\r\n    \u003Ctitle\u003ENess\u003C/title\u003E\r\n  \u003C/head\u003E\r\n\r\n  \u003Cbody\u003E\r\n    \u003Cdiv id=\u0022root\u0022\u003E\u003C/div\u003E\r\n    \u003Cscript type=\u0022module\u0022 src=\u0022/src/main.tsx\u0022\u003E\u003C/script\u003E\r\n  \u003C/body\u003E\r\n\u003C/html\u003E\r\n\n--- server output ---\n\r\n\u003E ness@0.1.0 dev\r\n\u003E vite --host 127.0.0.1 --port 5173 --strictPort\r\n\r\n\u001B[33m(!) Your Vite config uses features that are unsupported by \u0060configLoader: \u0027native\u0027\u0060, which is planned to become the default in a future major version of Vite:\r\n  - \u0060__dirname\u0060 (vite.config.ts:20:41). Use \u0060import.meta.dirname\u0060 instead\r\nSet \u0060VITE_CONFIG_NATIVE_IGNORE_WARNING=true\u0060 to suppress this warning.\u001B[39m\r\n\r\n  \u001B[32m\u001B[1mVITE\u001B[22m v8.3.5\u001B[39m  \u001B[2mready in \u001B[0m\u001B[1m1386\u001B[22m\u001B[2m\u001B[0m ms\u001B[22m\r\n\r\n  \u001B[32m\u279C\u001B[39m  \u001B[1mLocal\u001B[22m:   \u001B[36mhttp://127.0.0.1:\u001B[1m5173\u001B[22m/\u001B[39m\r\n",
+        "durationMs": 2556
+      }
+    ],
+    "executions": [
+      {
+        "source": "production-build",
+        "resolvedExecutable": "C:\\nvm4w\\nodejs\\npm.CMD",
+        "args": [
+          "run",
+          "build"
+        ],
+        "cwd": "D:\\Projetos\\Tauri\\Ness",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "tests-pass",
+        "resolvedExecutable": "C:\\nvm4w\\nodejs\\npm.CMD",
+        "args": [
+          "test"
+        ],
+        "cwd": "D:\\Projetos\\Tauri\\Ness",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "backend-tests",
+        "resolvedExecutable": "C:\\Users\\Pires\\.local\\bin\\uv.EXE",
+        "args": [
+          "run",
+          "--directory",
+          "ness-api",
+          "pytest",
+          "-q"
+        ],
+        "cwd": "D:\\Projetos\\Tauri\\Ness",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "dev-server-home-200",
+        "resolvedExecutable": "C:\\nvm4w\\nodejs\\npm.CMD",
+        "args": [
+          "run",
+          "dev",
+          "--",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "5173",
+          "--strictPort"
+        ],
+        "cwd": "D:\\Projetos\\Tauri\\Ness",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      }
+    ]
+  }
+}

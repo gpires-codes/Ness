@@ -14,6 +14,7 @@ interface ChatInputProps {
   draft: string;
   setDraft: (draft: string) => void;
   onSend: (text: string) => void;
+  disabled?: boolean;
 }
 
 export function ChatInput({
@@ -21,13 +22,13 @@ export function ChatInput({
   draft,
   setDraft,
   onSend,
+  disabled = false,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
+    if (disabled || !draft.trim()) return;
     onSend(draft);
-
-    if (textareaRef.current) textareaRef.current.value = "";
   };
 
   return (
@@ -46,6 +47,7 @@ export function ChatInput({
           ref={textareaRef}
           value={draft}
           placeholder="Escreva uma mensagem..."
+          disabled={disabled}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
@@ -57,9 +59,11 @@ export function ChatInput({
 
         <InputGroupAddon align="block-end">
           <InputGroupButton
-            className="ml-auto"
+            className="ml-auto aria-disabled:opacity-50"
             size="icon-sm"
             variant="default"
+            disabled={disabled}
+            aria-disabled={!draft.trim()}
             onClick={handleSend}
           >
             <ArrowUp strokeWidth={2.5} />

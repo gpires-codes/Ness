@@ -1,4 +1,4 @@
-import { chatModels, type ChatModel } from "@/core/chat";
+import type { ChatModel } from "@/core/chat";
 import { useTr } from "@/core/i18n";
 
 import {
@@ -9,12 +9,18 @@ import {
 } from "@/components/ui/select";
 
 interface Props {
-  model: ChatModel;
-  setModel: (m: ChatModel) => void;
+  model: string;
+  models: ChatModel[];
+  setModel: (model: string) => void;
   disabled?: boolean;
 }
 
-export function SelectModelButton({ model, setModel, disabled }: Props) {
+export function SelectModelButton({
+  model,
+  models,
+  setModel,
+  disabled,
+}: Props) {
   const tr = useTr();
 
   return (
@@ -22,15 +28,17 @@ export function SelectModelButton({ model, setModel, disabled }: Props) {
       <Select
         value={model}
         onValueChange={(value) => {
-          if (value && isChatModel(value)) setModel(value);
+          if (value && models.some((option) => option.id === value)) {
+            setModel(value);
+          }
         }}
         disabled={disabled}
       >
         <SelectTrigger className="w-full sm:w-64" aria-label={tr("chat.model")}>
-          {getModelLabel(model)}
+          {models.find((option) => option.id === model)?.label ?? model}
         </SelectTrigger>
         <SelectContent>
-          {chatModels.map((option) => (
+          {models.map((option) => (
             <SelectItem key={option.id} value={option.id}>
               {option.label}
             </SelectItem>
@@ -39,13 +47,4 @@ export function SelectModelButton({ model, setModel, disabled }: Props) {
       </Select>
     </div>
   );
-}
-
-function isChatModel(value: string): value is ChatModel {
-  return chatModels.some((model) => model.id === value);
-}
-
-function getModelLabel(model: string): string {
-  const label = chatModels.find((m) => m.id === model)?.label ?? model;
-  return label.split(" · ").slice(1).join(" · ");
 }

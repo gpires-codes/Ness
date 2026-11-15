@@ -1,9 +1,10 @@
 import asyncio
 from types import SimpleNamespace
 
+from starlette.testclient import TestClient
 from starlette.responses import Response
 
-from ness_api.main import require_bearer_token
+from ness_api.main import app, require_bearer_token
 
 
 def run_middleware(path="/protected", method="GET", authorization=None):
@@ -72,3 +73,20 @@ def test_health_and_cors_preflight_do_not_require_token(monkeypatch):
     assert health.status_code == preflight.status_code == 200
     assert health_reached_endpoint
     assert preflight_reached_endpoint
+
+
+def test_chat_cors_preflight_allows_tanstack_run_id_header():
+    with TestClient(app) as client:
+        response = client.options(
+            "/chat",
+            headers={
+                "Origin": "http://tauri.localhost",
+                "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": (
+                    "authorization,content-type,x-run-id"
+                ),
+            },
+        )
+
+    assert response.status_code == 200
+    assert "x-run-id" in response.headers["access-control-allow-headers"].lower()
