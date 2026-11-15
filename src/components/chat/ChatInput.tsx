@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import { ArrowUp } from "lucide-react";
 import { useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
@@ -9,12 +10,18 @@ import {
 } from "@/components/ui/input-group";
 
 interface ChatInputProps {
+  className?: string;
   draft: string;
   setDraft: (draft: string) => void;
   onSend: (text: string) => void;
 }
 
-export function ChatInput({ draft, setDraft, onSend }: ChatInputProps) {
+export function ChatInput({
+  className,
+  draft,
+  setDraft,
+  onSend,
+}: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
@@ -24,7 +31,7 @@ export function ChatInput({ draft, setDraft, onSend }: ChatInputProps) {
   };
 
   return (
-    <div className="flex flex-col gap-2 max-w-[760px] w-full">
+    <div className={cn(className, "flex flex-col gap-2 w-full")}>
       <InputGroup
         className="pt-2"
         onClick={(e) => {

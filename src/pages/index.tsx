@@ -3,14 +3,6 @@ import { useTranslation } from "react-i18next";
 
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ChatInput } from "@/components/chat";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-
 import {
   chatModels,
   streamChat,
@@ -18,18 +10,12 @@ import {
   type ChatTurn,
 } from "@/core/chat";
 
+import { ChatInput, SelectModelButton } from "@/components/chat";
+import { ChatMessageScroller } from "@/components/chat/ChatMessageScroller";
+
 export const Route = createFileRoute("/")({
   component: Index,
 });
-
-function isChatModel(value: string): value is ChatModel {
-  return chatModels.some((model) => model.id === value);
-}
-
-function getModelLabel(model: string): string {
-  const label = chatModels.find((m) => m.id === model)?.label ?? model;
-  return label.split(" · ").slice(1).join(" · ");
-}
 
 function Index() {
   const { t } = useTranslation();
@@ -93,11 +79,10 @@ function Index() {
   }
 
   return (
-    <main className="mx-auto flex min-h-full w-full max-w-3xl flex-col px-5 py-6">
-      <h1 className="text-2xl font-semibold">{t("home.title")}</h1>
-
-      <section
-        className="flex-1 space-y-4 py-6"
+    <main className="mx-auto flex flex-col h-full w-full max-w-3xl justify-center py-6">
+      <ChatMessageScroller messages={messages} />
+      {/* <section
+        className="flex-1 space-y-4 pb-6 overflow-auto max-h-[65vh] app-scrollbar"
         aria-label={t("chat.conversation")}
         aria-live="polite"
       >
@@ -126,7 +111,7 @@ function Index() {
             </div>
           ))
         )}
-      </section>
+      </section> */}
 
       {error && (
         <p className="mb-3 text-sm text-destructive" role="alert">
@@ -134,29 +119,7 @@ function Index() {
         </p>
       )}
 
-      <div className="mb-2 flex justify-end">
-        <Select
-          value={model}
-          onValueChange={(value) => {
-            if (value && isChatModel(value)) setModel(value);
-          }}
-          disabled={sending}
-        >
-          <SelectTrigger
-            className="w-full sm:w-64"
-            aria-label={t("chat.model")}
-          >
-            {getModelLabel(model)}
-          </SelectTrigger>
-          <SelectContent>
-            {chatModels.map((option) => (
-              <SelectItem key={option.id} value={option.id}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <SelectModelButton model={model} setModel={setModel} disabled={sending} />
 
       <ChatInput draft={draft} setDraft={setDraft} onSend={sendMessage} />
     </main>
