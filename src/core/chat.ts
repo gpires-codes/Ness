@@ -39,6 +39,19 @@ export function shouldShowThinkingLoader(
 const chatModelsSchema = z.array(chatModelSchema);
 const errorSchema = z.object({ detail: z.string() });
 
+export function resolveSelectedModel(
+  models: ChatModel[],
+  preferredModel: unknown,
+): string {
+  if (
+    typeof preferredModel === "string" &&
+    models.some((model) => model.id === preferredModel)
+  ) {
+    return preferredModel;
+  }
+  return models[0]?.id ?? "";
+}
+
 export async function getModels(
   capability: ModelCapability,
 ): Promise<ChatModel[]> {
